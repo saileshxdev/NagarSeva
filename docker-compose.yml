@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: nagarseva-db
+    environment:
+      POSTGRES_DB: nagarseva
+      POSTGRES_USER: nagarseva_user
+      POSTGRES_PASSWORD: nagarseva_dev_pass
+    ports:
+      - "5433:5432"   # host:container — use 5433 to avoid conflict with local Postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nagarseva_user -d nagarseva"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

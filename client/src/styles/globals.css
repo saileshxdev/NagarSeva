@@ -1,0 +1,316 @@
+/* ============================================================
+   globals.css — Tailwind v4 entry point + NagarSeva design tokens
+   ============================================================ */
+
+@import "tailwindcss";
+
+/* ── Custom design tokens via @theme ────────────────────────────────────────
+   These become Tailwind utility classes automatically.
+   e.g. bg-base, text-primary, border-accent, shadow-accent
+   ─────────────────────────────────────────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-base:         #0a0f1e;
+  --color-surface:      #0f172a;
+  --color-elevated:     #1e293b;
+  --color-highlight:    #263349;
+
+  --color-border:       #1e293b;
+  --color-border-focus: #38bdf8;
+
+  --color-primary:      #f1f5f9;
+  --color-secondary:    #94a3b8;
+  --color-muted:        #475569;
+
+  --color-accent:       #38bdf8;
+  --color-accent-hover: #7dd3fc;
+  --color-accent-dim:   rgba(56, 189, 248, 0.12);
+  --color-accent-glow:  rgba(56, 189, 248, 0.25);
+
+  --color-success:      #22c55e;
+  --color-success-dim:  rgba(34, 197, 94, 0.12);
+  --color-warning:      #f59e0b;
+  --color-danger:       #ef4444;
+  --color-danger-dim:   rgba(239, 68, 68, 0.12);
+
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Border radius */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-accent: 0 0 24px rgba(56, 189, 248, 0.25);
+}
+
+/* ── Base styles ─────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-base);
+    color: var(--color-primary);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  button {
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+
+  input, textarea, select {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+  }
+
+  img, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Scrollbar */
+  *, html, body {
+    --sb-track-color: #eae8e8;
+    --sb-thumb-color: #1e2a5a;
+    --sb-size: 10px;
+  }
+
+  ::-webkit-scrollbar {
+    width: var(--sb-size);
+    height: var(--sb-size);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 2px;
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    *, html, body {
+        scrollbar-color: var(--sb-thumb-color)
+                       var(--sb-track-color);
+    }
+  }
+}
+
+/* ── Reusable component classes ─────────────────────────────────────────────
+   Keep complex multi-property patterns here so page files stay clean.
+   ─────────────────────────────────────────────────────────────────────── */
+@layer components {
+
+  /* OTP digit input */
+  .otp-digit {
+    @apply w-12 h-14 text-center text-2xl font-bold rounded-xl outline-none
+           transition-all duration-200 font-mono caret-[--color-accent];
+    background: var(--color-elevated);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-primary);
+  }
+  .otp-digit:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-dim);
+    background: var(--color-highlight);
+  }
+  .otp-digit.filled {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .otp-digit.error {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+    animation: shake 0.4s ease;
+  }
+
+  /* Form input with left icon */
+  .form-input {
+    @apply w-full rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all duration-200;
+    background: var(--color-elevated);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-primary);
+  }
+  .form-input::placeholder { color: var(--color-muted); }
+  .form-input:focus {
+    border-color: var(--color-border-focus);
+    background: var(--color-highlight);
+    box-shadow: 0 0 0 3px var(--color-accent-dim);
+  }
+  .form-input.input-error {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 3px var(--color-danger-dim);
+  }
+  .form-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Primary CTA button */
+  .btn-primary {
+    @apply w-full flex items-center justify-center gap-2 py-3 px-5
+           font-bold text-sm rounded-xl transition-all duration-200;
+    background: var(--color-accent);
+    color: #0a0f1e;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+    box-shadow: var(--shadow-accent);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active:not(:disabled) { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+}
+
+/* ── Keyframe animations ─────────────────────────────────────────────────── */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(10, 15, 30, 0.3);
+  border-top-color: #0a0f1e;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ── Mobile typography improvements ──────────────────────────────────────── */
+@media (max-width: 480px) {
+  html {
+    font-size: 15px;
+  }
+
+  body {
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3 {
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .step-title {
+    font-size: 1.2rem;
+  }
+
+  .step-subtitle {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  button, .btn-next, .btn-back, .btn-primary {
+    font-size: 0.9rem;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  input, textarea, select {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .wizard-card {
+    padding: 24px 20px 28px;
+  }
+
+  .step-label {
+    font-size: 0.6rem;
+  }
+
+  .review-field-label {
+    font-size: 0.68rem;
+  }
+
+  .review-field-value {
+    font-size: 0.875rem;
+  }
+}
+
+/* ── Leaflet Cluster & Marker Overrides ────────────────────────────────────── */
+.cluster-marker-wrap {
+  background: none !important;
+  border: none !important;
+}
+
+.cluster-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.85);
+  border: 3px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 2px 12px rgba(56, 189, 248, 0.4);
+  color: #0a0f1e;
+  font-weight: 800;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.cluster-marker:hover {
+  transform: scale(1.15);
+}
+
+.issue-marker-wrap {
+  background: none !important;
+  border: none !important;
+}
+
+.issue-marker {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 2px solid #38bdf8;
+  border-radius: 50%;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.issue-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+}
+
+@keyframes cardSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
